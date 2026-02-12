@@ -71,19 +71,23 @@ selected_model_name = st.sidebar.selectbox(
 # -----------------------------
 if uploaded_file is not None:
 
-    df = pd.read_csv(uploaded_file)
+    try:
+        uploaded_file.seek(0)
+        df = pd.read_csv(uploaded_file)
+
+        if df.empty:
+            st.error("Uploaded CSV is empty.")
+            st.stop()
+
+    except Exception as e:
+        st.error("Error reading CSV file. Please upload a valid CSV.")
+        st.stop()
 
     st.subheader("Uploaded Dataset Preview")
     st.dataframe(df.head())
 
-    # ================================
-    # APPLY SAME PREPROCESSING AS TRAINING
-    # ================================
 
-    df = pd.read_csv(uploaded_file)
 
-    st.subheader("Uploaded Dataset Preview")
-    st.dataframe(df.head())
 
     if "target" not in df.columns:
         st.error("Target column missing in uploaded file.")
@@ -117,4 +121,5 @@ if uploaded_file is not None:
         auc = "Not Available"
 
     # ==============
+
 
