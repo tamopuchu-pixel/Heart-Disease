@@ -77,6 +77,10 @@ if uploaded_file is not None:
     X = df.iloc[:, :-1]
     y = df.iloc[:, -1]
 
+    # Remove any unwanted index column if exists
+    if "Unnamed: 0" in X.columns:
+        X = X.drop(columns=["Unnamed: 0"])
+
     # Apply scaling
     X_scaled = scaler.transform(X)
 
@@ -138,3 +142,4 @@ if uploaded_file is not None:
 
 else:
     st.info("Please upload a test CSV file to begin.")
+
