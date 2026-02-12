@@ -80,6 +80,16 @@ if uploaded_file is not None:
     # Remove any unwanted index column if exists
     if "Unnamed: 0" in X.columns:
         X = X.drop(columns=["Unnamed: 0"])
+    # Convert all columns to numeric
+    X = X.apply(pd.to_numeric, errors="coerce")
+
+    # Fill missing values (if any appear after coercion)
+    X = X.fillna(0)
+
+    # Check feature count
+    if X.shape[1] != scaler.n_features_in_:
+        st.error(f"Expected {scaler.n_features_in_} features but got {X.shape[1]}")
+        st.stop()
 
     # Apply scaling
     X_scaled = scaler.transform(X.values)
@@ -142,5 +152,6 @@ if uploaded_file is not None:
 
 else:
     st.info("Please upload a test CSV file to begin.")
+
 
 
