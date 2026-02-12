@@ -122,4 +122,44 @@ if uploaded_file is not None:
 
     # ==============
 
+        # ================================
+    # Metrics Calculation
+    # ================================
+
+    accuracy = accuracy_score(y, y_pred)
+    precision = precision_score(y, y_pred)
+    recall = recall_score(y, y_pred)
+    f1 = f1_score(y, y_pred)
+    mcc = matthews_corrcoef(y, y_pred)
+    cm = confusion_matrix(y, y_pred)
+
+    # ================================
+    # Display Metrics
+    # ================================
+
+    st.subheader(f"Performance Metrics - {selected_model_name}")
+
+    col1, col2, col3 = st.columns(3)
+
+    col1.metric("Accuracy", f"{accuracy:.4f}")
+    col2.metric("Precision", f"{precision:.4f}")
+    col3.metric("Recall", f"{recall:.4f}")
+
+    col1.metric("F1 Score", f"{f1:.4f}")
+    col2.metric("MCC", f"{mcc:.4f}")
+
+    if isinstance(auc, float):
+        col3.metric("AUC", f"{auc:.4f}")
+    else:
+        col3.metric("AUC", "N/A")
+
+        st.subheader("Classification Report")
+
+    report = classification_report(y, y_pred, output_dict=True)
+    report_df = pd.DataFrame(report).transpose()
+    st.dataframe(report_df)
+
+
+
+
 
