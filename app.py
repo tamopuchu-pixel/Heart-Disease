@@ -80,18 +80,10 @@ if uploaded_file is not None:
     # APPLY SAME PREPROCESSING AS TRAINING
     # ================================
 
-    columns = [
-        "age", "sex", "cp", "trestbps", "chol", "fbs", "restecg",
-        "thalach", "exang", "oldpeak", "slope", "ca", "thal", "target"
-    ]
+    df = pd.read_csv(uploaded_file)
 
-    df.columns = columns
-
-    df.dropna(inplace=True)
-
-    df["target"] = (df["target"] > 0).astype(int)
-
-    df = pd.get_dummies(df, drop_first=True)
+    st.subheader("Uploaded Dataset Preview")
+    st.dataframe(df.head())
 
     if "target" not in df.columns:
         st.error("Target column missing in uploaded file.")
@@ -100,24 +92,17 @@ if uploaded_file is not None:
     X = df.drop("target", axis=1)
     y = df["target"]
 
-    # ================================
     # Match training feature columns
-    # ================================
-
     expected_features = scaler.feature_names_in_
 
-    for col in expected_features:
-        if col not in X.columns:
-            X[col] = 0
+    X = X.reindex(columns=expected_features, fill_value=0)
 
-    X = X[expected_features]
-
-    # ================================
-    # Scaling
-    # ================================
-
+    # Scale
     X_scaled = scaler.transform(X)
 
+
+    
+    
     # ================================
     # Prediction
     # ================================
@@ -132,3 +117,4 @@ if uploaded_file is not None:
         auc = "Not Available"
 
     # ==============
+
