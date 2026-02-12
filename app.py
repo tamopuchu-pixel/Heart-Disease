@@ -82,7 +82,7 @@ if uploaded_file is not None:
         X = X.drop(columns=["Unnamed: 0"])
 
     # Apply scaling
-    X_scaled = scaler.transform(X)
+    X_scaled = scaler.transform(X.values)
 
     model = models[selected_model_name]
 
@@ -142,4 +142,5 @@ if uploaded_file is not None:
 
 else:
     st.info("Please upload a test CSV file to begin.")
+
 
