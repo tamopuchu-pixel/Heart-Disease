@@ -212,8 +212,21 @@ if uploaded_file is not None:
         })
     )
 
+    st.subheader("Download Performance Report")
+
+    csv = comparison_df.to_csv(index=False).encode("utf-8")
+
+    st.download_button(
+        label="Download Model Performance Report",
+        data=csv,
+        file_name="model_performance_report.csv",
+        mime="text/csv"
+    )
+
+
 
     
+
 
 
 
