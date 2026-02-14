@@ -223,9 +223,26 @@ if uploaded_file is not None:
         mime="text/csv"
     )
 
+    st.markdown("## 📊 Model Performance Overview")
+
+    metric_cols = st.columns(6)
+
+    metric_cols[0].metric("Accuracy", f"{accuracy:.4f}")
+    metric_cols[1].metric("Precision", f"{precision:.4f}")
+    metric_cols[2].metric("Recall", f"{recall:.4f}")
+    metric_cols[3].metric("F1 Score", f"{f1:.4f}")
+    metric_cols[4].metric("MCC", f"{mcc:.4f}")
+
+    if isinstance(auc, float):
+        metric_cols[5].metric("AUC", f"{auc:.4f}")
+    else:
+        metric_cols[5].metric("AUC", "N/A")
+
+
 
 
     
+
 
 
 
