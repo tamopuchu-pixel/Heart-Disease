@@ -165,7 +165,7 @@ if uploaded_file is not None:
     # ================================
     if hasattr(model, "predict_proba"):
         fpr, tpr, _ = roc_curve(y, y_prob)
-        st.subheader("ROC Curve")\
+        st.subheader("ROC Curve")
         fig, ax = plt.subplots()
         ax.plot(fpr, tpr, label=f"{selected_model_name} (AUC = {auc:.4f})")
         ax.plot([0, 1], [0, 1], linestyle="--")
@@ -175,6 +175,7 @@ if uploaded_file is not None:
         st.pyplot(fig)
 
     
+
 
 
 
