@@ -17,6 +17,7 @@ from sklearn.metrics import (
 
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.metrics import roc_curve
 
 
 # -----------------------------
@@ -158,6 +159,57 @@ if uploaded_file is not None:
     report = classification_report(y, y_pred, output_dict=True)
     report_df = pd.DataFrame(report).transpose()
     st.dataframe(report_df)
+
+    # ================================
+    # ROC Curve
+    # ================================
+    if hasattr(model, "predict_proba"):
+        fpr, tpr, _ = roc_curve(y, y_prob)
+        st.subheader("ROC Curve")\
+        fig, ax = plt.subplots()
+        ax.plot(fpr, tpr, label=f"{selected_model_name} (AUC = {auc:.4f})")
+        ax.plot([0, 1], [0, 1], linestyle="--")
+        ax.set_xlabel("False Positive Rate")
+        ax.set_ylabel("True Positive Rate")
+        ax.legend()
+        st.pyplot(fig)
+
+    # ================================
+    # Model Comparison Table
+    # ================================
+
+    st.subheader("Model Comparison")
+    comparison_results = []
+
+    for name, mdl in models.items():
+        y_pred_all = mdl.predict(X_scaled)
+        if hasattr(mdl, "predict_proba"):
+            y_prob_all = mdl.predict_proba(X_scaled)[:, 1]
+            auc_all = roc_auc_score(y, y_prob_all)
+        else:
+            auc_all = np.nan
+
+        comparison_results.append({
+            "Model": name,
+            "Accuracy": accuracy_score(y, y_pred_all),
+            "Precision": precision_score(y, y_pred_all, zero_division=0),
+            "Recall": recall_score(y, y_pred_all, zero_division=0),
+            "F1 Score": f1_score(y, y_pred_all, zero_division=0),
+            "AUC": auc_all
+        })
+
+    comparison_df = pd.DataFrame(comparison_results)
+    st.dataframe(
+        comparison_df.style.format({
+            "Accuracy": "{:.4f}",
+            "Precision": "{:.4f}",
+            "Recall": "{:.4f}",
+            "F1 Score": "{:.4f}",
+            "AUC": "{:.4f}"
+        })
+    )
+
+
 
 
 
