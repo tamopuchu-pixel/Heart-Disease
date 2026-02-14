@@ -161,6 +161,32 @@ if uploaded_file is not None:
     st.dataframe(report_df)
 
     # ================================
+    # Confusion Matrix
+    # ================================
+
+    st.subheader("Confusion Matrix")
+
+    fig_cm, ax_cm = plt.subplots()
+
+    sns.heatmap(
+        cm,
+        annot=True,
+        fmt="d",
+        cmap="Blues",
+        cbar=False,
+        xticklabels=["No Disease", "Disease"],
+        yticklabels=["No Disease", "Disease"],
+        ax=ax_cm
+    )
+
+    ax_cm.set_xlabel("Predicted Label")
+    ax_cm.set_ylabel("Actual Label")
+    ax_cm.set_title(f"Confusion Matrix - {selected_model_name}")
+
+    st.pyplot(fig_cm)
+
+
+    # ================================
     # ROC Curve
     # ================================
     if hasattr(model, "predict_proba"):
@@ -244,6 +270,7 @@ if uploaded_file is not None:
 
 
     
+
 
 
 
