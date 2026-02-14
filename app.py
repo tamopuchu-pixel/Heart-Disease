@@ -174,7 +174,47 @@ if uploaded_file is not None:
         ax.legend()
         st.pyplot(fig)
 
+    # ================================
+    # Model Comparison Table
+    # ================================
+
+    st.subheader("Model Comparison")
+
+    comparison_results = []
+
+    for name, mdl in models.items():
+        y_pred_all = mdl.predict(X_scaled)
+
+        if hasattr(mdl, "predict_proba"):
+            y_prob_all = mdl.predict_proba(X_scaled)[:, 1]
+            auc_all = roc_auc_score(y, y_prob_all)
+        else:
+            auc_all = np.nan
+
+        comparison_results.append({
+            "Model": name,
+            "Accuracy": accuracy_score(y, y_pred_all),
+            "Precision": precision_score(y, y_pred_all, zero_division=0),
+            "Recall": recall_score(y, y_pred_all, zero_division=0),
+            "F1 Score": f1_score(y, y_pred_all, zero_division=0),
+            "AUC": auc_all
+        })
+
+    comparison_df = pd.DataFrame(comparison_results)
+
+    st.dataframe(
+        comparison_df.style.format({
+            "Accuracy": "{:.4f}",
+            "Precision": "{:.4f}",
+            "Recall": "{:.4f}",
+            "F1 Score": "{:.4f}",
+            "AUC": "{:.4f}"
+        })
+    )
+
+
     
+
 
 
 
