@@ -123,7 +123,7 @@ if uploaded_file is not None:
 
     # ==============
 
-        # ================================
+    # ================================
     # Metrics Calculation
     # ================================
 
@@ -154,9 +154,16 @@ if uploaded_file is not None:
     else:
         col3.metric("AUC", "N/A")
 
-        st.subheader("Classification Report")
+    st.subheader("Classification Report")
 
-    report = classification_report(y, y_pred, output_dict=True)
+    report = classification_report(
+    y,
+    y_pred,
+    target_names=["No Disease", "Disease"],
+    output_dict=True,
+    zero_division=0
+    )
+
     report_df = pd.DataFrame(report).transpose()
     st.dataframe(report_df)
 
@@ -270,6 +277,7 @@ if uploaded_file is not None:
 
 
     
+
 
 
 
