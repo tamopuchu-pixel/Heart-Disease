@@ -238,10 +238,13 @@ if uploaded_file is not None:
     else:
         metric_cols[5].metric("AUC", "N/A")
 
+    st.divider()
+
 
 
 
     
+
 
 
 
